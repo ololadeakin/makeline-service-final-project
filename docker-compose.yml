@@ -28,13 +28,14 @@ services:
       retries: 5
     environment:
       - ORDER_QUEUE_PORT=5671  # Azure Event Bus port (for AMQP over TLS)
-      - ORDER_QUEUE_HOSTNAME=${{ secrets.AZURE_SERVICE_BUS_HOSTNAME }}
-      - ORDER_QUEUE_USERNAME=${{ secrets.AZURE_SERVICE_BUS_USERNAME }}
-      - ORDER_QUEUE_PASSWORD=${{ secrets.AZURE_SERVICE_BUS_PASSWORD }} # Azure Event Bus Secret Key
+      - ORDER_QUEUE_HOSTNAME=my-eventbus-8915.servicebus.windows.net
+      - ORDER_QUEUE_USERNAME=RootManageSharedAccessKey
+      - ORDER_QUEUE_PASSWORD=HLF3Z+u8+fNAbr5THN0iRJ1PLby2GGObJ+ASbCfceXI=
+ # Azure Event Bus Secret Key
       - ORDER_QUEUE_NAME=orders  # Queue name in Azure Event Bus
       - ORDER_QUEUE_RECONNECT_LIMIT=3
       - ORDER_QUEUE_TRANSPORT=tls  # Secure connection to Azure Event Bus
-      - USE_WORKLOAD_IDENTITY_AUTH=true
+      - USE_WORKLOAD_IDENTITY_AUTH=false
     networks:
       - backend_services
 
