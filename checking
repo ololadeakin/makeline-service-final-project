@@ -1,5 +1,4 @@
 version: "3.7"
-
 services:
   mongodb:
     image: mongo:6.0.6
@@ -14,9 +13,8 @@ services:
       retries: 5
     networks:
       - backend_services
-
   order-service:
-    image: lolaakin/order-service:latest  # Image for order-service
+    image: dejmartins/order-service:latest
     container_name: 'order-service'
     restart: always
     ports:
@@ -27,19 +25,13 @@ services:
       timeout: 10s
       retries: 5
     environment:
-      - ORDER_QUEUE_PORT=5671  # Azure Event Bus port (for AMQP over TLS)
-      - ORDER_QUEUE_HOSTNAME=${{ secrets.AZURE_SERVICE_BUS_HOSTNAME }}
-      - ORDER_QUEUE_USERNAME=${{ secrets.AZURE_SERVICE_BUS_USERNAME }}
-      - ORDER_QUEUE_PASSWORD=${{ secrets.AZURE_SERVICE_BUS_PASSWORD }} # Azure Event Bus Secret Key
-      - ORDER_QUEUE_NAME=orders  # Queue name in Azure Event Bus
-      - ORDER_QUEUE_RECONNECT_LIMIT=3
-      - ORDER_QUEUE_TRANSPORT=tls  # Secure connection to Azure Event Bus
+      - ORDER_QUEUE_HOSTNAME=Endpoint=sb://pet-store.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=W0+3Slh1ZriCyWbUjt8vmp75arT1BK8Pk+ASbCmW2dk=
+      - ORDER_QUEUE_NAME=orders
       - USE_WORKLOAD_IDENTITY_AUTH=true
     networks:
       - backend_services
-
   virtual-customer:
-    image: lolaakin/virtual-customer:latest  # Image for virtual-customer
+    image: ramymohamed/virtual-customer-l8:latest
     container_name: 'virtual-customer'
     restart: always
     environment:
@@ -50,7 +42,7 @@ services:
     depends_on:
       order-service:
         condition: service_healthy
-
 networks:
   backend_services:
     driver: bridge
+ 
